@@ -1,0 +1,114 @@
+#!/bin/bash
+
+cred='\033[0;31m'
+cgreen='\033[0;32m'
+cyellow='\033[0;33m'
+cblue='\033[0;34m'
+cpurple='\033[0;35m'
+cwhite='\033[0;37m'
+
+pprint() {
+    local color="${cpurple}"
+    [ ! -z "$2" ] && eval "color=\$$2"
+    printf "${color}$1${cwhite}"
+}
+
+yesnoprompt() {
+    local old_stty_cfg=$(stty -g)
+    stty raw -echo
+    answer=$(head -c 1)
+    stty $old_stty_cfg
+    echo "$answer" | grep -iq "^y"
+}
+
+update_system() {
+    pprint "\n╭────────────────────────────────────╮\n" "cblue"
+    pprint "│   Updating Package List...         │\n" "cblue"
+    pprint "╰────────────────────────────────────╯\n" "cblue"
+    
+    sudo apt update 2>&1 | grep "can be upgraded" &>/dev/null
+    if [ $? -eq 0 ]; then
+        pprint "✓ Updates Available\n" "cyellow"
+        pprint "\nDo you want to upgrade? (y/n): " "cwhite"
+        if yesnoprompt; then
+            pprint "\nUpgrading packages...\n" "cblue"
+            sudo apt upgrade -y
+        else
+            echo
+        fi
+    else
+        pprint "✓ System is up to date\n" "cgreen"
+    fi
+}
+
+install_packages() {
+    pprint "\n╭────────────────────────────────────╮\n" "cblue"
+    pprint "│   Installing Dependencies...       │\n" "cblue"
+    pprint "╰────────────────────────────────────╯\n" "cblue"
+    
+    sudo apt install -y python3-pip ffmpeg curl git
+    pprint "✓ Core packages installed\n" "cgreen"
+}
+
+install_nodejs() {
+    pprint "\n╭────────────────────────────────────╮\n" "cblue"
+    pprint "│   Installing Node.js...            │\n" "cblue"
+    pprint "╰────────────────────────────────────╯\n" "cblue"
+    
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs > nodelog.txt 2>&1
+    pprint "✓ Node.js installed\n" "cgreen"
+}
+
+install_dependencies() {
+    pprint "\n╭────────────────────────────────────╮\n" "cblue"
+    pprint "│   Installing Python Packages...    │\n" "cblue"
+    pprint "╰────────────────────────────────────╯\n" "cblue"
+    
+    pip3 install -U -r requirements.txt > pypilog.txt 2>&1
+    pprint "✓ Python requirements installed\n" "cgreen"
+}
+
+create_env() {
+    if [ ! -f .env ]; then
+        pprint "\nCreating .env file template...\n" "cblue"
+        cp .env.sample .env
+        pprint "✓ Created .env file. Please edit it before starting.\n" "cyellow"
+    fi
+}
+
+clear
+pprint "\n╔════════════════════════════════════╗\n" "cpurple"
+pprint "║                                    ║\n" "cpurple"
+pprint "║     MattoMusic Setup Installer     ║\n" "cpurple"
+pprint "║                                    ║\n" "cpurple"
+pprint "╚════════════════════════════════════╝\n\n" "cpurple"
+
+pprint "ℹ Error Logs:\n" "cblue"
+pprint "  • Node.js errors → nodelog.txt\n" "cwhite"
+pprint "  • Python errors  → pypilog.txt\n\n" "cwhite"
+
+sleep 1
+
+pprint "⚠ This script requires sudo privileges.\n" "cyellow"
+sudo test || exit 1
+
+update_system
+install_packages
+install_nodejs
+install_dependencies
+
+pprint "\n╔════════════════════════════════════╗\n" "cgreen"
+pprint "║   Installation Completed! ✓        ║\n" "cgreen"
+pprint "╚════════════════════════════════════╝\n\n" "cgreen"
+
+sleep 1
+create_env
+
+clear
+pprint "\n╔════════════════════════════════════╗\n" "cgreen"
+pprint "║                                    ║\n" "cgreen"
+pprint "║    MattoMusic is ready to run!     ║\n" "cgreen"
+pprint "║        Type: bash start            ║\n" "cgreen"
+pprint "║                                    ║\n" "cgreen"
+pprint "╚════════════════════════════════════╝\n\n" "cgreen"

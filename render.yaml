@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: matto-music
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      apt-get update && apt-get install -y ffmpeg
+      pip install -r requirements.txt
+    startCommand: python3 -m MattoMusic
+    autoDeploy: true
+
+    envVars:
+      API_ID: 
+        sync: false
+      API_HASH: 
+        sync: false
+      API_KEY:
+        sync: false
+      BOT_TOKEN:
+        sync: false
+      MONGO_DB_URI: 
+        sync: false
+      OWNER_ID:
+        value: 7574330905
+      OWNER_USERNAME:
+        value: Matto726
+      BOT_USERNAME:
+        value: MattoMusicBot
+      UPSTREAM_REPO:
+        value: https://github.com/Matto726/LabubuMusic
+      STRING_SESSION:
+        sync: false
+      GIT_TOKEN:
+        sync: false
+      HEROKU_API_KEY:
+        sync: false
+      HEROKU_APP_NAME:
+        sync: false
+      LOG_GROUP_ID:
+        sync: false
+      SUPPORT_GROUP:
+        value: https://t.me/laboobusupportbot

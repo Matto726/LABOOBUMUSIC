@@ -1,0 +1,103 @@
+{
+  "name": "Matto Music",
+  "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
+  "logo": "https://files.catbox.moe/v7hio8.jpg",
+  "keywords": [
+    "python3",
+    "telegram",
+    "bot",
+    "Laboobubots",
+    "MusicBot",
+    "telegram-bot",
+    "pyrogram"
+  ],
+  "env": {
+    "API_ID": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": "",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": "",
+      "required": true
+    },
+    "BOT_TOKEN": {
+      "description": "A Bot's token from Botfather",
+      "value": "",
+      "required": true
+    },
+    "MONGO_DB_URI": {
+      "description": "Get a mongodb url from https://cloud.mongodb.com.",
+      "value": "",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "The user id of user whom you would like to add as an owner.",
+      "value": "",
+      "required": true
+    },
+    "STRING_SESSION": {
+      "description": "A Pyrogram string session. Get one from @Sessionbbbot",
+      "value": "",
+      "required": true
+    },
+    "LOG_GROUP_ID": {
+      "description": "Your Log Group ID. The bot will send play logs here. Ensure the bot is an admin.",
+      "value": "",
+      "required": true
+    },
+    "SUPPORT_GROUP": {
+      "description": "Your support group link",
+      "value": "https://t.me/laboobusupportbot",
+      "required": false
+    },
+    "SUPPORT_CHANNEL": {
+      "description": "Your support channel link",
+      "value": "https://t.me/Laboobubots",
+      "required": false
+    },
+    "INSTAGRAM": {
+      "description": "Your Instagram profile link or Any Link",
+      "value": "",
+      "required": false
+    },
+    "YOUTUBE": {
+      "description": "Your YouTube channel link or Any Link",
+      "value": "",
+      "required": false
+    },
+    "GITHUB": {
+      "description": "Your GitHub profile link or Any Link",
+      "value": "https://github.com/Matto726",
+      "required": false
+    },
+    "DONATE": {
+      "description": "Link where people can support/donate or Any Link",
+      "value": "https://t.me/laboobusupportbot",
+      "required": false
+    },
+    "START_IMG_URL": {
+      "description": "Image that appears with the /start command",
+      "value": "https://files.catbox.moe/7q8bfg.jpg",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  }
+}
